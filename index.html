@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CYB 201 Module 1 Quiz</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--tx:#14181f;--mut:#5b6472;--bd:#d9dde4;--ac:#2f5bea;--ok:#1f9d55;--okb:#dff5e8;--no:#d63b3b;--nob:#fde4e4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--card:#181d27;--tx:#eceff4;--mut:#9aa4b5;--bd:#2c3442;--ac:#6c8cff;--ok:#3ecf7e;--okb:#12301f;--no:#ff6b6b;--nob:#3a1717}}
+:root[data-theme="dark"]{--bg:#0f1218;--card:#181d27;--tx:#eceff4;--mut:#9aa4b5;--bd:#2c3442;--ac:#6c8cff;--ok:#3ecf7e;--okb:#12301f;--no:#ff6b6b;--nob:#3a1717}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:16px}
+h1{font-size:1.15rem;margin:4px 0 2px}
+.sub{color:var(--mut);font-size:.85rem;margin-bottom:12px}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .3s}
+.meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--mut);margin:8px 0 14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px}
+.q{font-size:1.05rem;font-weight:600;margin:0 0 14px}
+.opt{display:flex;gap:10px;width:100%;text-align:left;background:var(--card);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:12px;margin:0 0 10px;font:inherit;cursor:pointer;transition:background .15s,border-color .15s}
+.opt:hover:not(:disabled){border-color:var(--ac)}
+.opt b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--bd);display:grid;place-items:center;font-size:.8rem}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--okb);border-color:var(--ok)}
+.opt.ok b{background:var(--ok);color:#fff}
+.opt.no{background:var(--nob);border-color:var(--no)}
+.opt.no b{background:var(--no);color:#fff}
+.flag{min-height:24px;font-weight:700;margin:4px 0 10px}
+.flag.ok{color:var(--ok)}.flag.no{color:var(--no)}
+button.main{background:var(--ac);color:#fff;border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:600;cursor:pointer;width:100%}
+button.main:disabled{opacity:.4;cursor:default}
+.big{font-size:3rem;font-weight:800;text-align:center;margin:10px 0}
+.center{text-align:center}
+.flash-ok{animation:fo .5s}.flash-no{animation:fn .4s}
+@keyframes fo{0%{box-shadow:0 0 0 0 var(--ok)}100%{box-shadow:0 0 0 14px transparent}}
+@keyframes fn{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>CYB 201 · Module 1 Quiz</h1>
+<div class="sub">Units 1 and 2 · 70 questions · shuffled on every load</div>
+<div class="bar"><i id="pb"></i></div>
+<div class="meta"><span id="pos"></span><span id="sc"></span></div>
+<div id="app"></div>
+</div>
+<script>
+// Each entry: [question, CORRECT, wrong1, wrong2, wrong3]. Positions are randomised at runtime.
+const DATA=[
+["A thief watches a user type a Gmail password. According to the material, which principle is breached by that act alone?","Confidentiality","Integrity","Authentication","Non-repudiation"],
+["Why does the material say criminals go after networks, servers and computers?","They are mechanisms for reaching the data, which is the real target","They hold hardware value that criminals can resell for profit","They are weaker assets than the data records stored on them","They provide the only route for disrupting political institutions"],
+["The material splits cybersecurity into two words. Which pairing matches its explanation?","Cyber covers systems, networks, programs and data; security covers their protection","Cyber covers hackers and attackers; security covers laws that sanction them","Cyber covers the internet only; security covers hardware devices only","Cyber covers data in transit; security covers data held on servers"],
+["Which of these is NOT listed as a technique for maintaining confidentiality?","Network load balancing","Security tokens","Biometric access control","Strict privacy policies"],
+["Staff data in every department is changed to JOB LEFT when an employee quits, and only an authorised person may edit it. Which principle does the material use this to illustrate?","Integrity","Availability","Accountability","Authorization"],
+["The material mentions privacy-preserving keyword search. What does it enable?","Retrieving files that contain given keywords without decrypting their contents","Showing file contents only to users who pass a biometric verification","Encrypting every keyword so that no file can be searched or retrieved","Logging each keyword query so that auditors can review it later"],
+["A hospital server fails and a duplicate system immediately takes over its work. Which listed availability strategy is at work?","Redundancy","Privilege management","Logging and auditing","Data encryption"],
+["In the digital signature example, what does the receiver do to validate a message?","Decrypts the signature with the public key, rehashes the message, and compares hashes","Encrypts the message with the private key, then compares the two ciphertexts","Decrypts the signature with the private key, then compares it to the sender key","Hashes the public key and compares the result with the signature received"],
+["Under which principle does the material present the digital signature example?","Authentication","Non-repudiation","Integrity","Confidentiality"],
+["According to the material, which two things are pre-requisites for non-repudiation?","Data integrity and authenticity","Confidentiality and availability","Authorization and accountability","Encryption and redundancy"],
+["A message was altered in transit and its origin cannot be verified. Which principle can no longer be upheld as a result?","Non-repudiation","Availability","Confidentiality","Accountability"],
+["A user proves identity with a token and can then open only files tied to their role. What is the correct sequence?","Authentication, then authorization","Authorization, then authentication","Authentication, then non-repudiation","Accountability, then authorization"],
+["Which pair of measures does the material link to accountability?","Logging and auditing","Redundancy and backups","Encryption and tokens","Hashing and signatures"],
+["Which principle is said to prevent unauthorized access by allowing access according to user roles and permissions?","Authorization","Authentication","Accountability","Integrity"],
+["How does the material define identity management?","Determining the level of access each individual has within an organization","Verifying a device before it is allowed to reach sensitive systems","Making decisions on how data assets are handled and secured","Protecting software from threats through constant application updates"],
+["How does the material define operational security?","Processing and making decisions on handling and securing data assets","Maintaining the integrity and privacy of data in storage and in transit","Determining the level of access that each individual has","Resuming lost operations after a disaster has happened"],
+["When does the material say successful application security begins?","At the design stage, through source code, validation and threat modeling","At deployment, followed by constant patching of the live application","At the testing stage, once all source code has been completed","At maintenance, when updates are released against new threats"],
+["Information or data security is described as protecting the integrity and privacy of data in which state?","Both in storage and in transit","In storage only, through a strong storage mechanism","In transit only, through encryption of the channel","In use only, through limits on who can open it"],
+["Which is NOT named as a mobile security threat?","Cloud provider outage","Device loss or theft","Malware","Unauthorized access"],
+["What is the stated goal of the policies under Disaster Recovery and Business Continuity Planning?","Resume lost operations at the same operating capacity as before the event","Restore only critical operations at a reduced capacity after the event","Prevent any malicious activity before operations begin to suffer","Identify the attackers once the loss of data has taken place"],
+["The description given for User Education in the material is identical to the description of which other aspect?","Disaster Recovery and Business Continuity Planning","Operational Security and Data Asset Handling","Identity management and Access Level Control","Cloud security and Provider-Based Protection"],
+["Which providers does the material name under cloud security?","AWS, Azure, Google","AWS, Salt, Google","Azure, Google, NIST","AWS, Azure, OECD"],
+["Network security is described as protecting an organization’s assets against which threats?","Both external and internal threats","External intruders and outside attackers only","Internal misuse by staff members only","Software flaws and design errors only"],
+["Which motive is NOT listed as driving intruders to target sensitive information?","Industrial espionage","Extortion","Vandalism","Political or social motives"],
+["The introduction cites a report projecting what level of global cybercrime damage?","$10.5 trillion annually by 2025","$10.5 billion annually by 2025","$15 trillion annually by 2030","$1.05 trillion annually by 2025"],
+["Which of the following is explicitly included in cyberspace by the material?","The telephone set","Radio broadcast towers","Printed documents","Satellite dishes"],
+["A firm spends heavily on security and relaxes staff vigilance, believing it is fully protected. Which listed disadvantage does this show?","Potential false sense of security","High cost of implementation","Complexity","Potential for human error"],
+["A rogue administrator copies data despite strong perimeter defences. Which listed disadvantage applies?","Limited effectiveness against insider threat","High cost of implementation and upkeep","Complexity of managing the defences","Potential for human error by staff"],
+["Which pairing of reasons does the material give for governments being frequent targets?","Large sensitive data holdings and control of critical infrastructure","Weak legal protection and low public scrutiny of their systems","Large budgets that attract ransom-seeking attackers worldwide","Heavy reliance on cloud storage and big data analytics"],
+["A group defaces ministry websites to protest a policy. Which listed reason for targeting government does this reflect?","Hacktivists with political motivations","Insider threats from dishonest staff","Supply chain compromise of vendors","Lack of security updates on systems"],
+["Why does the material say governments are often targeted by ransomware?","They rely on critical services and need to restore operations quickly","They hold cryptocurrency reserves and usually keep weak backups","Public transparency rules expose their network layouts to attackers","Their outdated systems cannot be restored once files are encrypted"],
+["Which pairing of organisation and output is correct?","NIST: critical infrastructure framework; OECD: public sector systems guidelines","NIST: public sector systems guidelines; OECD: critical infrastructure framework","NIST: electronic voting guidelines; OECD: critical infrastructure framework","NIST: critical infrastructure framework; OECD: military communications guidelines"],
+["Which pairing of technology and government use is accurate?","IoT for real-time monitoring of bridges, roads and public transport","Blockchain for real-time monitoring of bridges and roads","AI for training, simulation and public infrastructure design","Cloud computing for secure electronic voting systems"],
+["Which technology is credited with improving information sharing between government agencies and citizens?","Cloud computing","Big data analytics","Blockchain","Process automation"],
+["How does the material say advanced technology adoption increased transparency in government?","Citizens can monitor activities and access budgets, policies and decisions","Citizens can vote remotely on budgets and policies as they are drafted","Citizens can audit classified security spending through public portals","Citizens can encrypt their own interactions with government agencies"],
+["An agency delays patching flaws that are already publicly known. Which listed vulnerability is this?","Lack of security updates","Old and outdated technological infrastructure","Design and configuration flaws","Supply chain attacks"],
+["How does the material describe insider threats in government?","Dishonest or negligent employees using their knowledge and access","Only employees who deliberately sell information to outsiders","Only former employees who still hold working credentials","Only contractors given temporary privileges to key systems"],
+["A compromised update from a software vendor gives attackers entry to a ministry network. Which vulnerability is this?","Supply chain attacks","Phishing and social engineering","Cyber warfare and espionage","Ransomware attacks on systems"],
+["Which activity does the material attribute to nation-states using sophisticated hacking capabilities?","Manipulating decision-making processes","Blocking data until a ransom is paid","Compromising software and hardware vendors","Exploiting negligent government employees"],
+["What does the Russia-Ukraine example illustrate?","Cyberattacks used as a tool of war to disrupt military operations and daily life","Hacktivist defacement of the government websites of allied states","Ransom extortion aimed at Ukrainian infrastructure operators","Espionage limited to stealing the military secrets of allies"],
+["Which pair of factors is said to hinder advanced security solutions in government?","Limited funds and qualified personnel","Excessive regulation and vendor lock-in","Public distrust and low digitisation","Obsolete laws and political turnover"],
+["How does the material distinguish the military’s primary mission from its primary cybersecurity responsibility?","Mission: security of all citizens; responsibility: protecting information systems and communications","Mission: protecting information systems; responsibility: security of all citizens","Mission: mitigating hazards; responsibility: supplying resilient technology","Mission: raising awareness; responsibility: detecting and prosecuting attackers"],
+["Why does the material say rising cyber-attacks make the military’s mission harder?","Protecting themselves is already onerous, let alone protecting all citizens","Military budgets shrink as civilian agencies absorb most cyber spending","Citizens refuse to share personal data with military institutions","Attacks mainly target civilian infrastructure beyond military reach"],
+["What is the stated overall goal of the military’s cybersecurity and technology strategy?","To mitigate any potential hazards, with cyber defence integrated into planning","To eliminate adversary capability through pre-emptive cyber action","To replace conventional operations with cyber operations over time","To outsource defence of its networks to expert cybersecurity vendors"],
+["What does the material report about the 2015 attack?","21.5 million federal employees; social security numbers, family information, health records, fingerprints","2.15 million troops; social security numbers, bank records, health records, fingerprints","21.5 million federal employees; passwords, family information, health records, photographs","215 million citizens; social security numbers, family information, tax records, fingerprints"],
+["Which description of a typical cyber assault fits the material?","Entry through one vulnerable spot, then movement to other parts of the system","Simultaneous assault on every device through hardware tampering","Persistent flooding of the network until its defences collapse","Gradual credential guessing across all of the user accounts"],
+["Why does the material say most cyber-attacks are software-based?","Hardware-based attacks are more challenging to carry out","Software defences are weaker than hardware defences","Hardware-based attacks are easier for defenders to detect","Software vulnerabilities are patched less often than hardware ones"],
+["Which is NOT a capability the material attributes to Salt Communications?","Automated threat hunting across hosted networks","Message broadcasting to groups of users","Real-time incident reporting to headquarters","Protected instant messaging and secure calls"],
+["What does the material say Salt clients gain through complete ownership of secure communications?","Assurance over where the platform is hosted and who is granted access","Control over key length and the choice of cipher in use","Control over audit retention and the format of its logs","Assurance over vendor staff vetting and the timing of patches"],
+["An owner of a small firm in a small country assumes criminals will ignore the business. What does the material say?","Criminals target all sized businesses regardless of location, country or revenue","Small businesses face lower risk because attackers favour large revenues","Risk depends mainly on whether data is stored locally or in the cloud","Only firms that hold online customer records are ever targeted"],
+["Why does the material say small and medium corporate businesses are prone to cybersecurity threats?","They do not take serious measures to protect themselves","They store more customer data than large firms","They cannot use cloud storage in a secure way","They are targeted only by local cyber criminals"],
+["What does the material say about the cost effect of cloud storage and online business data?","Protection costs rise on top of regular business operations costs","Protection costs replace the regular business operations costs","Cloud storage lowers exposure, so total costs eventually fall","Costs rise only for businesses that keep data on local servers"],
+["Which access routes for attackers does the material list for business data?","In-house employees, customers and third-party applications","Government agencies, employees and competitors","Cloud providers, regulators and customers","Suppliers, regulators and in-house employees"],
+["Which is NOT given as a reason cybersecurity is important for businesses?","Increased revenue from premium pricing","Avoiding legal liability for data breaches","Protecting the reputation of the business","Supporting the fight against rising cybercrime"],
+["An employee unwittingly lets an attacker reach company data. Which listed way of attack is this?","Unauthorised access to business data through employees","Hacking the computers or third-party systems","Infecting data storage sources with malware","Spamming with emails containing malware"],
+["Which item is listed under types of online threats to business but NOT under the most common cybersecurity risks?","Denial of service","Malware attacks","Weak passwords","Insider threats"],
+["Which item is NOT listed among the data mainly at risk in a business?","Source code repositories","Patent applications","Marketing strategy","Banking transactions"],
+["Which is listed as a benefit of cybersecurity solutions to organisations?","Support for your IT expert","Replacement of in-house IT staff","Removal of the need for backups","Guarantee of zero data breaches"],
+["Which steps does the material list for fixing a cyber threat after a breach?","Notifying affected parties and public relations support","Reporting to regulators and compensating customers","Isolating infected devices and conducting forensic analysis","Notifying competitors and suspending all operations"],
+["Which set of attack aims does the material say cybersecurity prevents?","Alter, destroy, gain access, extort or delete data and systems","Alter, intercept, impersonate, extort or delete data and systems","Alter, destroy, disclose, encrypt or monetise data and systems","Steal, destroy, access, extort or encrypt data and systems"],
+["A customer’s login is verified and every later action is recorded so staff can be held responsible. Which principles work together?","Authentication and accountability","Authorization and non-repudiation","Confidentiality and integrity","Availability and accountability"],
+["A DDoS flood makes a government portal unreachable to citizens, and no data is read or changed. Which principle is attacked?","Availability","Integrity","Confidentiality","Authentication"],
+["Which statement correctly contrasts authorization and accountability?","Authorization grants access by roles; accountability holds actors responsible via logs and audits","Authorization verifies identity; accountability limits access according to roles","Authorization means logging actions; accountability means privilege management","Authorization prevents denial of actions; accountability proves identity"],
+["A clerk with edit rights changes a record by bypassing the approval workflow. Which principle is breached?","Integrity","Confidentiality","Authentication","Availability"],
+["Which learning outcome is stated for Unit 2?","Identify the impact of cybersecurity on civil and military institutions","Appraise the cybersecurity concept as worth studying","Understand the key principles of cybersecurity","Evaluate standards used to protect critical infrastructure"],
+["According to the model answer on learning cybersecurity, one reduces exposure to which risks?","Financial and reputational risks","Legal and political risks","Operational and strategic risks","Financial and technical risks"],
+["Which description matches phishing and social engineering as given in the material?","Tricking employees into granting access to sensitive systems and information","Blocking access to data and systems until a ransom is paid","Compromising vendors in order to infiltrate government organisations","Using outdated systems to cause malfunctions and service interruptions"],
+["Which remedy does the material give for the vulnerabilities of government systems?","Invest in training, advanced security technologies and private sector collaboration","Replace legacy systems and recruit foreign cybersecurity specialists","Adopt blockchain and cloud computing across all government agencies","Fund public awareness drives and mandate encryption on all systems"],
+["What did the military’s steps to grasp cyber defence problems result in?","Greater integration with operational planning","Separation of cyber units from field commands","Reduced reliance on information technologies","Delegation of cyber defence to civilian bodies"],
+["Which data does the material say cybersecurity techniques are designed to protect?","Data stored, transmitted or used on an information system","Data stored in the cloud and transmitted across networks only","Data stored locally and used by authorised administrators only","Data transmitted across networks and archived offline only"]
+];
+
+const rnd=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n};
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+const L=["A","B","C","D"];
+let Q,i,score,answered;
+const $=id=>document.getElementById(id);
+
+function start(){
+  Q=shuffle(DATA.map(d=>({q:d[0],c:d[1],o:shuffle(d.slice(1))})));
+  i=0;score=0;render();
+}
+function render(){
+  answered=false;
+  const t=Q.length;
+  $("pb").style.width=(i/t*100)+"%";
+  $("pos").textContent="Question "+(i+1)+" of "+t;
+  $("sc").textContent="Score: "+score;
+  const q=Q[i];
+  const app=$("app");
+  app.innerHTML="";
+  const card=document.createElement("div");card.className="card";
+  const h=document.createElement("p");h.className="q";h.textContent=q.q;card.appendChild(h);
+  q.o.forEach((txt,k)=>{
+    const b=document.createElement("button");b.className="opt";
+    b.innerHTML="<b>"+L[k]+"</b><span></span>";
+    b.lastChild.textContent=txt;
+    b.onclick=()=>pick(b,txt);
+    b.dataset.v=txt;card.appendChild(b);
+  });
+  const f=document.createElement("div");f.className="flag";f.id="flag";card.appendChild(f);
+  const n=document.createElement("button");n.className="main";n.id="next";n.disabled=true;
+  n.textContent=i===t-1?"See results":"Next question";n.onclick=()=>{i++;i<t?render():finish()};
+  card.appendChild(n);app.appendChild(card);
+}
+function pick(btn,txt){
+  if(answered)return;answered=true;
+  const q=Q[i],good=txt===q.c;
+  const btns=document.querySelectorAll(".opt");
+  btns.forEach(b=>{b.disabled=true;if(b.dataset.v===q.c)b.classList.add("ok")});
+  const f=$("flag");
+  if(good){score++;f.className="flag ok";f.textContent="✓ Correct";btn.classList.add("flash-ok")}
+  else{btn.classList.add("no","flash-no");f.className="flag no";f.textContent="✗ Wrong. The correct answer is highlighted in green."}
+  $("sc").textContent="Score: "+score;
+  $("next").disabled=false;$("next").focus();
+}
+function finish(){
+  $("pb").style.width="100%";
+  const t=Q.length,p=Math.round(score/t*100);
+  $("pos").textContent="Finished";
+  $("app").innerHTML='<div class="card center"><div class="big" style="color:var('+(p>=70?'--ok':'--no')+')">'+p+'%</div><p>You scored <b>'+score+'</b> out of <b>'+t+'</b>.</p><p style="color:var(--mut)">'+(p>=70?"Strong mastery of Module 1.":"Review Units 1 and 2 and try again.")+'</p><button class="main" id="again">Restart with a new shuffle</button></div>';
+  $("again").onclick=start;
+}
+start();
+</script>
+</body>
+</html>
