@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Tutorial Chapters 1–3 Quiz</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--tx:#14181f;--mut:#5b6472;--bd:#d9dde4;--ac:#2f5bea;--ok:#1f9d55;--okb:#dff5e8;--no:#d63b3b;--nob:#fde4e4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--card:#181d27;--tx:#eceff4;--mut:#9aa4b5;--bd:#2c3442;--ac:#6c8cff;--ok:#3ecf7e;--okb:#12301f;--no:#ff6b6b;--nob:#3a1717}}
+:root[data-theme="dark"]{--bg:#0f1218;--card:#181d27;--tx:#eceff4;--mut:#9aa4b5;--bd:#2c3442;--ac:#6c8cff;--ok:#3ecf7e;--okb:#12301f;--no:#ff6b6b;--nob:#3a1717}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:16px}
+h1{font-size:1.15rem;margin:4px 0 2px}
+.sub{color:var(--mut);font-size:.85rem;margin-bottom:12px}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .3s}
+.meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--mut);margin:8px 0 14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px}
+.q{font-size:1.05rem;font-weight:600;margin:0 0 14px}
+.opt{display:flex;gap:10px;width:100%;text-align:left;background:var(--card);color:var(--tx);border:2px solid var(--bd);border-radius:12px;padding:12px;margin:0 0 10px;font:inherit;cursor:pointer;transition:background .15s,border-color .15s}
+.opt:hover:not(:disabled){border-color:var(--ac)}
+.opt b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--bd);display:grid;place-items:center;font-size:.8rem}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--okb);border-color:var(--ok)}
+.opt.ok b{background:var(--ok);color:#fff}
+.opt.no{background:var(--nob);border-color:var(--no)}
+.opt.no b{background:var(--no);color:#fff}
+.flag{min-height:24px;font-weight:700;margin:4px 0 10px}
+.flag.ok{color:var(--ok)}.flag.no{color:var(--no)}
+button.main{background:var(--ac);color:#fff;border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:600;cursor:pointer;width:100%}
+button.main:disabled{opacity:.4;cursor:default}
+.big{font-size:3rem;font-weight:800;text-align:center;margin:10px 0}
+.center{text-align:center}
+.flash-ok{animation:fo .5s}.flash-no{animation:fn .4s}
+@keyframes fo{0%{box-shadow:0 0 0 0 var(--ok)}100%{box-shadow:0 0 0 14px transparent}}
+@keyframes fn{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Artificial Intelligence · Chapters 1–3 Quiz</h1>
+<div class="sub">Overview of AI, Intelligent Systems, Research Areas · 70 questions · shuffled on every load</div>
+<div class="bar"><i id="pb"></i></div>
+<div class="meta"><span id="pos"></span><span id="sc"></span></div>
+<div id="app"></div>
+</div>
+<script>
+// Each entry: [question, CORRECT, wrong1, wrong2, wrong3]. Positions are randomised at runtime.
+const DATA=[
+["According to the material, which statement matches McCarthy’s definition of Artificial Intelligence?","The science and engineering of making intelligent machines, especially programs","The study of building machines that outperform humans on formal tasks","The engineering of computer hardware that imitates living neural tissue","The science of storing knowledge so that machines retrieve it quickly"],
+["Which things does the material say AI aims to make think intelligently, as intelligent humans do?","A computer, a computer-controlled robot, or a software","A computer, a sensor network, or a data repository","A robot, a program library, or a network protocol","A software, a mainframe cluster, or a controller chip"],
+["The material says AI is accomplished by first studying what?","How the human brain thinks and how humans learn, decide and work on problems","How machines store information and how programs execute instructions quickly","How experts write rules and how databases organise facts for retrieval","How computers calculate faster and how hardware keeps shrinking over time"],
+["What intention does the material say started the development of AI?","Creating in machines the kind of intelligence we regard highly in humans","Replacing human workers in industries where repetitive tasks are common","Proving that machines can calculate faster than the best human experts","Building computers that operate without any human knowledge or guidance"],
+["Which behaviours does the material attach specifically to the goal of creating expert systems?","Exhibit intelligent behaviour, learn, demonstrate, explain and advise users","Understand, think, learn and behave in the same manner that humans do","Reason, perceive, classify and generalise across many unfamiliar domains","Calculate, store, retrieve and adapt to changes in the working environment"],
+["Which discipline is named in the written list of contributing disciplines but is absent from the petal diagram?","Linguistics","Philosophy","Sociology","Neuro Science"],
+["Which set of functions does the material call a major thrust of AI development?","Reasoning, learning and problem solving","Perception, locomotion and speech synthesis","Calculation, storage and retrieval of records","Planning, scheduling and theorem verification"],
+["Which is NOT a characteristic the material attributes to programming without AI?","Modification is quick and easy to carry out","It answers the specific questions it was meant to solve","Changing it alters the structure of the program","Modification may affect the program adversely"],
+["Why can an AI program modify even a minute piece of information without affecting its structure?","It absorbs modifications by putting highly independent pieces of information together","It rewrites its own structure automatically whenever any change is requested","It answers only specific questions, so changes stay local to one answer","It keeps its knowledge in a single block that is replaced as a whole"],
+["Which pairing of program type and the questions it answers is accurate?","With AI: generic questions; without AI: specific questions","With AI: specific questions; without AI: generic questions","With AI: only coded questions; without AI: any question at all","With AI: structural questions; without AI: quick yes or no questions"],
+["Which is NOT listed among the unwelcome properties of real-world knowledge?","It is stored in many mutually incompatible languages","Its volume is huge, next to unimaginable","It is not well-organised or well-formatted","It keeps changing constantly over time"],
+["Which is NOT a stated property of a well-formed AI technique for organising knowledge?","It should be complete and accurate before it is used","It should be perceivable by the people who provide it","It should be easily modifiable so that errors can be corrected","It should be useful in many situations even if incomplete"],
+["What effect does the material say AI techniques have on a complex program they equip?","They elevate its speed of execution","They reduce its memory requirements","They remove the need for human knowledge","They guarantee fully accurate output"],
+["In strategic games such as chess and poker, a machine considers many possible positions by relying on what?","Heuristic knowledge","Exhaustive enumeration","Expert rule books","Spoken descriptions"],
+["Which description of the expert systems application area matches the material?","Integrates machine, software and special information to impart reasoning and advising","Understands natural language spoken by humans and answers back aloud","Interprets visual input to locate spatial information in photographs","Reads handwritten text and converts it into editable electronic text"],
+["Police software matches a suspect’s face to a stored portrait made by a forensic artist. Which application area does the material place this under?","Vision systems","Expert systems","Handwriting recognition","Natural language processing"],
+["Under which application heading does the material list doctors using a clinical expert system to diagnose a patient?","Vision systems","Expert systems","Intelligent robots","Speech recognition"],
+["Which is NOT listed among the variations a speech recognition system can handle?","Changes in the speaker’s emotional state","Different accents among speakers","Slang words in sentences","Noise in the background"],
+["What does handwriting recognition software do, according to the material?","Recognises letter shapes in pen or stylus writing and outputs editable text","Compares a writer’s pen pressure to stored profiles to confirm authorship","Translates handwritten notes into spoken output through a speech engine","Scans printed pages and stores them as images for later retrieval"],
+["Which physical quantity is NOT named among those that robot sensors detect?","Humidity","Pressure","Temperature","Sound"],
+["Which combination does the material give for how intelligent robots exhibit intelligence?","Efficient processors, multiple sensors and huge memory, plus learning from mistakes","A single strong sensor, a fixed rule book and continuous remote human control","Multiple actuators, a small memory and repetition of programmed motions","Efficient processors, a knowledge base and explanation facilities for users"],
+["Which ability is NOT listed in the material’s definition of intelligence?","Expressing emotions","Classifying","Generalising","Adapting to new situations"],
+["Which pairing of term and meaning correctly follows the material’s description of linguistic intelligence?","Phonology: speech sounds; syntax: grammar; semantics: meaning","Phonology: grammar; syntax: speech sounds; semantics: meaning","Phonology: meaning; syntax: grammar; semantics: speech sounds","Phonology: speech sounds; syntax: meaning; semantics: grammar"],
+["A pilot mentally rotates a 3D image of a landscape she is not looking at. Which intelligence does this best illustrate?","Spatial intelligence","Logical-mathematical intelligence","Bodily-kinesthetic intelligence","Intra-personal intelligence"],
+["Which statement correctly separates spatial from logical-mathematical intelligence?","Spatial re-creates and rotates images without objects; logical-mathematical uses relationships without objects","Spatial uses relationships without objects; logical-mathematical re-creates and rotates images","Spatial manipulates objects with fine motor skills; logical-mathematical handles abstract ideas","Spatial recognises pitch and rhythm; logical-mathematical constructs three-dimensional images"],
+["A craftsman fashions a product by controlling fine and coarse motor skills while manipulating objects. Which intelligence is this?","Bodily-kinesthetic intelligence","Musical intelligence","Spatial intelligence","Interpersonal intelligence"],
+["An interviewer reads another person’s beliefs and intentions, while a monk examines his own motivations. Which pairing is correct?","Interpersonal for the interviewer; intra-personal for the monk","Intra-personal for the interviewer; interpersonal for the monk","Interpersonal for both, since both examine feelings and beliefs","Intra-personal for both, since both examine intentions and motives"],
+["Which pairing of intelligence and the example given in the material is correct?","Intra-personal: Gautam Buddha","Linguistic: musicians and composers","Spatial: players and dancers","Logical-mathematical: map readers and astronauts"],
+["According to the material, when can a machine be said to be artificially intelligent?","Equipped with at least one and at most all of the intelligences","Equipped with all of the intelligences at the same time","Equipped with at least linguistic and logical-mathematical intelligence","Equipped with more intelligences than any single human possesses"],
+["Which is NOT one of the five components of intelligence given in the material?","Memory retrieval","Perception","Problem solving","Linguistic intelligence"],
+["Which statement correctly characterises the Shalini example (all women above 60 are grandmothers; Shalini is 65)?","Deductive, because it moves from a general class statement to a specific conclusion","Inductive, because it moves from specific observations to a broad general statement","Deductive, because its conclusion may still be false when the premises hold","Inductive, because what is true of the class holds for every member"],
+["A researcher draws a broad claim from specific observations. Which property does the material attach to this kind of reasoning?","The conclusion may be false even if all premises are true","The conclusion is certain whenever the class statement holds","The conclusion applies to every member of a general class","The conclusion begins from a general statement and narrows down"],
+["According to the material, reasoning is the set of processes that gives a basis for what?","Judgement, decision making and prediction","Sensing, filtering and organising information","Gaining knowledge by study or practice","Choosing a path blocked by unknown hurdles"],
+["Which set does the material say possesses the ability to learn?","Humans, some animals and AI-enabled systems","Humans and AI-enabled systems only","All living organisms and AI-enabled systems","Humans, all animals and any programmed machine"],
+["A cook adds ‘a little less’ salt because last time a tablespoon made the potatoes salty. Which learning type is this?","Relational learning","Episodic learning","Perceptual learning","Stimulus-response learning"],
+["A witness recalls events in the exact order she experienced them. Which learning type does the material call linear and orderly?","Episodic learning","Spatial learning","Observational learning","Motor learning"],
+["Which pairing of learning type and example from the material is correct?","Stimulus-response: a dog raising its ear on hearing a doorbell","Observational: a dog raising its ear on hearing a doorbell","Stimulus-response: a child mimicking her parent","Auditory: a person picking objects and writing"],
+["Learning to recognise stimuli one has seen before, such as classifying objects, is which learning type?","Perceptual learning","Spatial learning","Relational learning","Observational learning"],
+["A traveller builds a roadmap in her mind before actually following the road. Which learning type is this?","Spatial learning","Episodic learning","Motor learning","Auditory learning"],
+["How does the material relate decision making to problem solving?","Problem solving includes decision making, selecting the best alternative among several","Decision making includes problem solving, finding a path around known hurdles","They are separate processes that never share the same desired goal","Decision making replaces problem solving once alternatives become known"],
+["Which description of problem solving matches the material?","Arriving at a desired solution from a present situation along a path blocked by hurdles","Selecting the best suitable alternative from multiple available alternatives","Acquiring, interpreting, selecting and organising sensory information","Gaining knowledge or skill by studying, practising or being taught"],
+["How does the material describe perception in the domain of AI?","A mechanism that puts data acquired by sensors together in a meaningful manner","A mechanism that selects the best alternative using stored heuristic knowledge","A mechanism that converts spoken sentences into editable written text","A mechanism that matches stored rules against facts to derive conclusions"],
+["Which abilities define linguistic intelligence as a component of intelligence?","Using, comprehending, speaking and writing verbal and written language","Recognising phonology, syntax and semantics in spoken sentences","Creating and understanding meanings made of sound, pitch and rhythm","Distinguishing other people’s feelings, beliefs and intentions in speech"],
+["Why, according to the material, is the number 40404040 easy for humans to store and recall?","Humans store and recall by patterns, and this pattern is simple","Humans store by searching algorithms, and this number is short","Humans perceive by rules and data, which repeat in this number","Machines cannot recall it, so humans compensate by memorising"],
+["A damaged sign has part of it missing. Which outcome fits the material’s comparison of humans and machines?","A human can figure out the complete sign, whereas a machine cannot do so correctly","A machine reconstructs the sign by searching patterns, whereas a human cannot","Both reconstruct the sign equally well because both perceive by patterns","Neither can reconstruct it, since both depend on rules and stored data"],
+["How do humans and machines perceive, according to the material?","Humans by patterns; machines by a set of rules and data","Humans by rules and data; machines by patterns","Both by patterns, but machines need a larger memory","Both by rules and data, but humans work faster"],
+["Which is NOT among the five research areas shown in the chapter’s diagram?","Computer vision","Fuzzy logic","Robotics","Neural networks"],
+["A phone system identifies a caller from tone, voice pitch and accent. Which technology is this?","Voice recognition","Speech recognition","Face recognition","Handwriting recognition"],
+["A navigation system obeys commands from any driver without being trained on that driver. Which statement fits the material?","Speech recognition, since it is not speaker dependent and needs no training","Voice recognition, since it is person-oriented and needs no training","Speech recognition, since it must identify who is speaking each time","Voice recognition, since it analyses tone, pitch and accent of the driver"],
+["Which statement about the development difficulty of speech recognition systems is accurate?","Speaker-independent systems are difficult to develop; speaker-dependent ones are comparatively easy","Speaker-dependent systems are difficult to develop; speaker-independent ones are comparatively easy","Both are equally difficult because both need training on each speaker","Both are comparatively easy because both compare patterns in a database"],
+["Which pairing of recognition type, objective and training need is correct?","Speech: what was spoken, no training; voice: who is speaking, training needed","Speech: who is speaking, training needed; voice: what was spoken, no training","Speech: what was spoken, training needed; voice: who is speaking, no training","Speech: who is speaking, no training; voice: what was spoken, training needed"],
+["In the working of speech and voice recognition systems, what does the converter do?","Turns the analog signal into an equivalent digital signal for speech processing","Compares patterns with the database in order to recognise the spoken words","Passes reverse feedback to the database after recognition has finished","Captures the spoken input at the microphone and sends it to the sound card"],
+["In which fields does the material say speech and voice recognition terms are common?","Robotics, expert systems and natural language processing","Robotics, fuzzy logic and neural networks","Expert systems, neural networks and fuzzy logic","Natural language processing, fuzzy logic and robotics"],
+["Which pairing of research area and real-life example from the material is correct?","Fuzzy logic: consumer electronics and automobiles","Expert systems: face and character recognition","Neural networks: flight-tracking and clinical systems","Robotics: Google Now feature and automatic voice output"],
+["In the real-life applications table, handwriting recognition is listed as an example of which research area?","Neural networks","Natural language processing","Expert systems","Robotics"],
+["Which task is classified as a Formal task?","Theorem proving","Planning","Fault finding","Language translation"],
+["Which task does the material classify as an Expert task?","Creativity","Planning","Verification","Reasoning"],
+["The material places games such as Go, chess and checkers under which class of tasks?","Formal tasks","Mundane tasks","Expert tasks","Both formal and expert tasks"],
+["Which grouping lists tasks that all belong to the Mundane class?","Computer vision, language generation, common sense and locomotion","Computer vision, language generation, verification and locomotion","Computer vision, theorem proving, common sense and locomotion","Fault finding, language generation, common sense and locomotion"],
+["Which grouping lists tasks that all belong to the Expert class?","Fault finding, monitoring, financial analysis and medical diagnosis","Fault finding, monitoring, financial analysis and logic","Fault finding, monitoring, common sense and medical diagnosis","Fault finding, planning, financial analysis and medical diagnosis"],
+["In what order do humans learn the three classes of tasks, according to the material?","Mundane, then formal, then expert","Mundane, then expert, then formal","Formal, then mundane, then expert","Expert, then formal, then mundane"],
+["Why does the material say AI work is now more prosperous in the Expert Task domain?","Expert tasks need expert knowledge without common sense, which is easier to represent","Expert tasks are learned first by humans, so machines copy them most readily","Expert tasks need complex knowledge representation, which machines handle best","Expert tasks were the earliest domain of AI work, so most algorithms exist"],
+["Why was early AI work concentrated in the mundane task domain?","Mundane tasks are easiest for humans, and this was assumed true for machines too","Mundane tasks need expert knowledge without common sense, so they are simple to encode","Mundane tasks are learned last by humans, so they were considered the frontier","Mundane tasks need little knowledge representation, so algorithms were already available"],
+["A researcher predicts that tasks easiest for humans will be easiest for machines. What does the material imply?","It was once considered true, but mundane tasks proved to need more knowledge and algorithms","It remains true, which is why AI work is concentrated in the mundane domain","It holds for formal tasks only, since they are learned after mundane tasks","It was always false, because machines never required knowledge representation"],
+["What does the material say machines require for handling mundane tasks?","More knowledge, complex knowledge representation and complicated algorithms","Less knowledge, simple rules and quick searching of stored examples","Expert knowledge, common sense removed and fixed rule tables","Special sensors, large memory and continuous human supervision"],
+["According to the material, how many areas can contribute to building an intelligent system?","One or multiple areas","Exactly all the listed areas","At least two distinct areas","Only Computer Science plus one more"],
+["What does the material say the natural language processing application makes possible?","Interacting with a computer that understands natural language spoken by humans","Converting scanned printed pages into editable text for later editing","Diagnosing a patient by comparing symptoms with a stored rule base","Steering robots by following a map built from stored visual images"],
+["Which learning types do students listening to recorded lectures and a person picking objects illustrate, in that order?","Auditory learning and motor learning","Motor learning and auditory learning","Auditory learning and perceptual learning","Episodic learning and motor learning"],
+["How does the material characterise intelligence before listing its components?","Intangible and composed of five components","Tangible and composed of five components","Intangible and composed of seven components","Tangible and composed of three components"],
+["Which pairing of task class and tasks is accurate?","Mundane: reasoning and planning; Formal: verification and theorem proving","Formal: reasoning and planning; Mundane: verification and theorem proving","Expert: reasoning and planning; Formal: verification and theorem proving","Mundane: reasoning and planning; Expert: verification and theorem proving"]
+];
+
+const rnd=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n};
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+const L=["A","B","C","D"];
+let Q,i,score,answered;
+const $=id=>document.getElementById(id);
+
+function start(){
+  Q=shuffle(DATA.map(d=>({q:d[0],c:d[1],o:shuffle(d.slice(1))})));
+  i=0;score=0;render();
+}
+function render(){
+  answered=false;
+  const t=Q.length;
+  $("pb").style.width=(i/t*100)+"%";
+  $("pos").textContent="Question "+(i+1)+" of "+t;
+  $("sc").textContent="Score: "+score;
+  const q=Q[i];
+  const app=$("app");
+  app.innerHTML="";
+  const card=document.createElement("div");card.className="card";
+  const h=document.createElement("p");h.className="q";h.textContent=q.q;card.appendChild(h);
+  q.o.forEach((txt,k)=>{
+    const b=document.createElement("button");b.className="opt";
+    b.innerHTML="<b>"+L[k]+"</b><span></span>";
+    b.lastChild.textContent=txt;
+    b.onclick=()=>pick(b,txt);
+    b.dataset.v=txt;card.appendChild(b);
+  });
+  const f=document.createElement("div");f.className="flag";f.id="flag";card.appendChild(f);
+  const n=document.createElement("button");n.className="main";n.id="next";n.disabled=true;
+  n.textContent=i===t-1?"See results":"Next question";n.onclick=()=>{i++;i<t?render():finish()};
+  card.appendChild(n);app.appendChild(card);
+}
+function pick(btn,txt){
+  if(answered)return;answered=true;
+  const q=Q[i],good=txt===q.c;
+  document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(b.dataset.v===q.c)b.classList.add("ok")});
+  const f=$("flag");
+  if(good){score++;f.className="flag ok";f.textContent="✓ Correct";btn.classList.add("flash-ok")}
+  else{btn.classList.add("no","flash-no");f.className="flag no";f.textContent="✗ Wrong. The correct answer is highlighted in green."}
+  $("sc").textContent="Score: "+score;
+  $("next").disabled=false;$("next").focus();
+}
+function finish(){
+  $("pb").style.width="100%";
+  const t=Q.length,p=Math.round(score/t*100);
+  $("pos").textContent="Finished";
+  $("app").innerHTML='<div class="card center"><div class="big" style="color:var('+(p>=70?'--ok':'--no')+')">'+p+'%</div><p>You scored <b>'+score+'</b> out of <b>'+t+'</b>.</p><p style="color:var(--mut)">'+(p>=70?"Strong mastery of Chapters 1 to 3.":"Review Chapters 1 to 3 and try again.")+'</p><button class="main" id="again">Restart with a new shuffle</button></div>';
+  $("again").onclick=start;
+}
+start();
+</script>
+</body>
+</html>
